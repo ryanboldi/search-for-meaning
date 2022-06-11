@@ -20,10 +20,10 @@ class Game:
             self._running = False
     
     def on_loop(self):
-        pass
+        pass    
 
     def on_render(self):
-        pass
+        self.grid.draw(self._display_surf, 100, 50)
 
     def on_cleanup(self):
         pygame.quit()
