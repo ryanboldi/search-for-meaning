@@ -1,4 +1,5 @@
 import unittest
+from cv2 import line
 import pygame
 import numpy
 
@@ -31,13 +32,35 @@ class Grid:
         else:
             self._grid[x][y] = val
             return True
+
+    def getColor(self, val):
+        if val == 0:
+            return (255, 255, 255)
+        elif val == 1:
+            return (0, 0, 0)
+        else:
+            gray = 255 * (1- val)
+            return (gray, gray, gray)
     
     def draw(self, surface, draw_width, draw_height):
         cell_width = draw_width / self._width
         cell_height = draw_height / self._height
 
+        line_thickness = 0
+
         surface.fill((255, 255, 255))
-        pygame.draw.circle(surface, (255, 35, 70), (100,100), 50)
+
+        for x in range(0, self._width):
+            for y in range(0, self._height):
+                pygame.draw.rect(surface, self.getColor(self.getInGrid(x, y)), pygame.Rect(x * cell_width, y * cell_height, cell_width, cell_height))
+
+        for vert_line in range (0, self._width + 1):
+            pygame.draw.line(surface, (0, 0, 0), (vert_line * cell_width, 0), (vert_line * cell_width, draw_height), width=line_thickness)
+
+        for horiz_line in range (0, self._height + 1):
+            pygame.draw.line(surface, (0, 0, 0), (0, horiz_line * cell_height), (draw_width, horiz_line * cell_height), width=line_thickness)
+
+
         pygame.display.update()
 
 
