@@ -1,6 +1,10 @@
+from random import random
+
 import pygame
 from pygame.locals import *
+
 from grid import Grid
+
 
 class Game:
     def __init__(self):
@@ -9,11 +13,10 @@ class Game:
         self.size = self.width, self.height = 600, 600
 
         self.grid = Grid(50, 50)
-        #self.grid.setInGrid(5, 5, 1)
 
         for i in range(0, 50):
             for j in range(0, 50):
-                self.grid.setInGrid(i, j, i/100 + j/100)
+                self.grid.setInGrid(i, j, [random() * 255, random() * 255, random() * 255])
     
     def on_init(self):
         pygame.init()
