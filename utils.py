@@ -11,10 +11,10 @@ def clipNum(num, low, high):
 
 def sigmoid(x):
    return 1/(1+np.exp(-x))
-
     
 def getColor(l):
-    return tuple(map(lambda x: 255*x, l))
+    v = clipNum(255*l, 0, 255)
+    return (v, v, v)
     
 # UNIT TESTING
 class UtilsTest(unittest.TestCase):
@@ -24,10 +24,11 @@ class UtilsTest(unittest.TestCase):
         self.assertEqual(5, clipNum(5, 0, 10)) #in
     
     def testGetColor(self):
-        self.assertTupleEqual(getColor([0, 0, 0]), (0, 0, 0))
-        self.assertTupleEqual(getColor([-1, -1, -1]), (0, 0, 0))
-        self.assertTupleEqual(getColor([0.1, 0.1, 0.1]), (0, 0, 0))
-        self.assertTupleEqual(getColor([300, 300, 300]), (255, 255, 255))
+        self.assertEqual(getColor(0), 0)
+        self.assertEqual(getColor(-1), 0)
+        self.assertEqual(getColor(0.1), (0.1*255))
+        self.assertEqual(getColor(1), 255)
+
 
 # modified from https://numbersmithy.com/2d-and-3d-convolutions-using-numpy/
 def conv3D2(var, kernel, pad=0):

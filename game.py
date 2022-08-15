@@ -13,7 +13,7 @@ class Game:
 
         self.grid = Grid(20, 20)
 
-        if self.grid.setGrid(np.random.randint(0, 2, (20, 20, 3))):
+        if self.grid.setGrid(np.random.randint(0, 2, (20, 20))):
             print("successfully set grid")
 
     def on_init(self):
