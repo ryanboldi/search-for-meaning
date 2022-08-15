@@ -1,23 +1,21 @@
-from random import random
-
+import time
+import numpy as np
 import pygame
 from pygame.locals import *
 
 from grid import Grid
 
-
 class Game:
     def __init__(self):
         self._running = True
         self._display_surf = None
-        self.size = self.width, self.height = 600, 600
+        self.size = self.width, self.height = 400, 400
 
-        self.grid = Grid(50, 50)
+        self.grid = Grid(20, 20)
 
-        for i in range(0, 50):
-            for j in range(0, 50):
-                self.grid.setInGrid(i, j, [random() * 255, random() * 255, random() * 255])
-    
+        if self.grid.setGrid(np.random.randint(0, 2, (20, 20, 3))):
+            print("successfully set grid")
+
     def on_init(self):
         pygame.init()
         self._display_surf = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
@@ -28,7 +26,7 @@ class Game:
             self._running = False
     
     def on_loop(self):
-        pass    
+        self.grid.update()
 
     def on_render(self):
         self.grid.draw(self._display_surf, self.width, self.height)
@@ -41,8 +39,9 @@ class Game:
             self._running = False
 
         while (self._running):
+            time.sleep(1)
             for event in pygame.event.get():
                 self.on_event(event)
-            self.on_loop()
             self.on_render()
+            self.on_loop()
         self.on_cleanup()

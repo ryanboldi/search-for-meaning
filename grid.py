@@ -1,9 +1,10 @@
 import unittest
 
-import numpy
+import math
+import numpy as np
 import pygame
 
-from utils import getColor
+from utils import getColor, conv3D2, sigmoid
 
 class Grid:
     def __init__(self, width, height, colors = 3):
@@ -11,7 +12,7 @@ class Grid:
         self._width = width
         self._height = height
         self._colors = colors
-        self._grid = numpy.zeros((self._width, self._height, self._colors))
+        self._grid = np.zeros((self._width, self._height, self._colors))
 
     def getWdith(self):
         return self._width
@@ -35,12 +36,19 @@ class Grid:
         else:
             self._grid[x][y] = val
             return True
-    
+
+    def setGrid(self, val):
+        if (val.shape[:2] == self._grid.shape[:2]):
+            self._grid = val
+            return True
+        return False
+
     def draw(self, surface, draw_width, draw_height):
+        print(self._grid[0])
         cell_width = draw_width / self._width
         cell_height = draw_height / self._height
 
-        line_thickness = 0
+        line_thickness = 1
 
         surface.fill((255, 255, 255))
 
@@ -54,9 +62,13 @@ class Grid:
         for horiz_line in range (0, self._height + 1):
             pygame.draw.line(surface, (0, 0, 0), (0, horiz_line * cell_height), (draw_width, horiz_line * cell_height), width=line_thickness)
 
-
         pygame.display.update()
 
+    def update(self):
+        #must use a 3x3x3 arr as conv kernal
+        self._grid = sigmoid(conv3D2(self._grid, np.array([[[1, 1, 1],[1, 1, 1], [0, 0, 0]],
+                                                            [[1, 1, 1],[1, 1, 1], [0, 0, 0]],
+                                                            [[1, 1, 1],[1, 1, 1], [0, 0, 0]]]), 1))
 
 # UNIT TESTING
 class TestGridClass(unittest.TestCase):
@@ -73,4 +85,4 @@ class TestGridClass(unittest.TestCase):
         self.assertEqual(grid.getInGrid(2, 3)[1], 100)
         self.assertEqual(grid.getInGrid(2, 3)[2], 100)
 
-unittest.main()
+#unittest.main()
